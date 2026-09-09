@@ -241,14 +241,19 @@ public class OsrsLifetimePlugin extends Plugin
 
         String token = config.syncToken() == null ? "" : config.syncToken().trim();
         String linkCode = config.linkCode() == null ? "" : config.linkCode().trim();
-        if (token.isEmpty())
+
+        // A fresh link code entered before talking to Hans intentionally takes
+        // priority over any stored token. This allows relinking after moving to
+        // a new server/database or after a token has become invalid.
+        boolean relinking = accountAgeDays != null && !linkCode.isEmpty();
+        if (relinking)
         {
-            if (linkCode.isEmpty())
-            {
-                syncInFlight.set(false);
-                return;
-            }
             payload.linkCode = linkCode;
+        }
+        else if (token.isEmpty())
+        {
+            syncInFlight.set(false);
+            return;
         }
 
         Request.Builder requestBuilder = new Request.Builder()
@@ -256,7 +261,7 @@ public class OsrsLifetimePlugin extends Plugin
             .header("User-Agent", "RuneLite OSRS-Lifetime-Sync/0.1.0")
             .post(RequestBody.create(RuneLiteAPI.JSON, gson.toJson(payload)));
 
-        if (!token.isEmpty())
+        if (!relinking && !token.isEmpty())
         {
             requestBuilder.header("Authorization", "Bearer " + token);
         }
