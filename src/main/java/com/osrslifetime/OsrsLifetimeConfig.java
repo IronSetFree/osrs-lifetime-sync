@@ -17,7 +17,7 @@ public interface OsrsLifetimeConfig extends Config
     )
     default String apiBaseUrl()
     {
-        return "http://localhost:3000";
+        return "https://osrs-lifetime-bot-production.up.railway.app";
     }
 
     @ConfigItem(
