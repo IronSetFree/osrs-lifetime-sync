@@ -14,11 +14,21 @@ The plugin lets a player explicitly link an Old School RuneScape character to Di
 
 New links are private by default. Visibility is controlled through the Discord bot.
 
+## Production service
+
+The plugin communicates with the OSRS Lifetime service at:
+
+```text
+https://osrs-lifetime-bot-production.up.railway.app
+```
+
+The server URL is fixed in the plugin and is not user-configurable.
+
 ## Data sharing and privacy
 
-This plugin communicates with a third-party OSRS Lifetime server when you explicitly link your account.
+This plugin communicates with a third-party OSRS Lifetime server when you explicitly link your account and during later synchronization.
 
-The plugin may send:
+The plugin sends:
 
 - your RuneScape display name (RSN),
 - total playtime in minutes,
@@ -26,7 +36,7 @@ The plugin may send:
 - the one-time Discord link code during initial linking,
 - a random synchronization token returned by the OSRS Lifetime server for later authenticated syncs.
 
-The synchronization token is stored in RuneLite configuration as a secret value. The plugin does **not** request or send your Jagex password, RuneScape password, bank PIN, authenticator code, or Jagex Launcher credentials.
+The synchronization token is stored in RuneLite configuration as a hidden secret value. The plugin does **not** request or send your Jagex password, RuneScape password, bank PIN, authenticator code, or Jagex Launcher credentials.
 
 The server derives an approximate creation date from Hans' whole-number account age. Because Hans reports whole days rather than an exact timestamp, the derived calendar date can be off by roughly one day.
 
@@ -46,19 +56,13 @@ run
 
 Running that task launches RuneLite in developer mode with `OSRS Lifetime Sync` loaded.
 
-The development API URL defaults to:
-
-```text
-http://localhost:3000
-```
-
-For remote testing, set the plugin's **API URL** configuration to the HTTPS URL of your OSRS Lifetime server.
+The plugin uses the production OSRS Lifetime server while running in development as well.
 
 ## RuneLite Plugin Hub
 
-This repository is intended to be submitted to the RuneLite Plugin Hub using `build=standard`. It intentionally does not require third-party Java dependencies beyond dependencies already supplied by RuneLite.
+This project uses `build=standard` and intentionally adds no third-party Java dependencies beyond dependencies already supplied by RuneLite.
 
-Before public Plugin Hub release, the plugin must use a stable production HTTPS API endpoint and the Plugin Hub manifest should include a third-party-server warning describing the data listed above.
+Because the plugin sends player data to the OSRS Lifetime service, the Plugin Hub manifest includes a third-party-server warning that identifies the data being sent.
 
 ## License
 
