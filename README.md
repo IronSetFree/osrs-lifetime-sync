@@ -28,13 +28,14 @@ The server URL is fixed in the plugin and is not user-configurable.
 
 This plugin communicates with a third-party OSRS Lifetime server when you explicitly link your account and during later synchronization.
 
-The plugin sends:
+The service receives:
 
 - your RuneScape display name (RSN),
 - total playtime in minutes,
 - the whole-number account age in days reported by Hans during initial linking,
 - the one-time Discord link code during initial linking,
-- a random synchronization token returned by the OSRS Lifetime server for later authenticated syncs.
+- a random synchronization token returned by the OSRS Lifetime server for later authenticated syncs,
+- your IP address as part of the HTTPS network connection.
 
 The synchronization token is stored in RuneLite configuration as a hidden secret value. The plugin does **not** request or send your Jagex password, RuneScape password, bank PIN, authenticator code, or Jagex Launcher credentials.
 
