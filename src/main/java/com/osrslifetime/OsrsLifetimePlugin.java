@@ -37,6 +37,7 @@ import okhttp3.Response;
 )
 public class OsrsLifetimePlugin extends Plugin
 {
+    private static final String API_BASE_URL = "https://osrs-lifetime-bot-production.up.railway.app";
     private static final int TIME_PLAYED_VARC = 526;
     private static final int TICKS_PER_MINUTE = 100;
     private static final int SYNC_EVERY_TICKS = 1000; // roughly 10 minutes
@@ -226,14 +227,6 @@ public class OsrsLifetimePlugin extends Plugin
             return;
         }
 
-        String baseUrl = config.apiBaseUrl().trim().replaceAll("/+$", "");
-        if (baseUrl.isEmpty())
-        {
-            syncInFlight.set(false);
-            notifyUser("OSRS Lifetime API URL is empty.");
-            return;
-        }
-
         SyncPayload payload = new SyncPayload();
         payload.rsn = currentRsn;
         payload.playtimeMinutes = minutes;
@@ -242,9 +235,6 @@ public class OsrsLifetimePlugin extends Plugin
         String token = config.syncToken() == null ? "" : config.syncToken().trim();
         String linkCode = config.linkCode() == null ? "" : config.linkCode().trim();
 
-        // A fresh link code entered before talking to Hans intentionally takes
-        // priority over any stored token. This allows relinking after moving to
-        // a new server/database or after a token has become invalid.
         boolean relinking = accountAgeDays != null && !linkCode.isEmpty();
         if (relinking)
         {
@@ -257,7 +247,7 @@ public class OsrsLifetimePlugin extends Plugin
         }
 
         Request.Builder requestBuilder = new Request.Builder()
-            .url(baseUrl + "/api/v1/sync")
+            .url(API_BASE_URL + "/api/v1/sync")
             .header("User-Agent", "RuneLite OSRS-Lifetime-Sync/0.1.0")
             .post(RequestBody.create(RuneLiteAPI.JSON, gson.toJson(payload)));
 
