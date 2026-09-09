@@ -32,8 +32,7 @@ import okhttp3.Response;
 @PluginDescriptor(
     name = "OSRS Lifetime Sync",
     description = "Opt-in sync of Hans account age and time played to a Discord bot",
-    tags = {"time", "played", "account", "age", "discord", "hans", "lifetime"},
-    enabledByDefault = false
+    tags = {"time", "played", "account", "age", "discord", "hans", "lifetime"}
 )
 public class OsrsLifetimePlugin extends Plugin
 {
