@@ -288,7 +288,15 @@ public class OsrsLifetimePlugin extends Plugin
                     if (!closeable.isSuccessful())
                     {
                         log.warn("OSRS Lifetime sync returned {}: {}", closeable.code(), body);
-                        notifyUser("OSRS Lifetime sync rejected (HTTP " + closeable.code() + "). " + body);
+                        if (closeable.code() == 401 && !relinking && !token.isEmpty())
+                        {
+                            configManager.setConfiguration(OsrsLifetimeConfig.GROUP, "syncToken", "");
+                            notifyUser("Stored OSRS Lifetime link is no longer valid. Run /link in Discord, paste the new code, then ask Hans again.");
+                        }
+                        else
+                        {
+                            notifyUser("OSRS Lifetime sync rejected (HTTP " + closeable.code() + "). " + body);
+                        }
                         return;
                     }
 
